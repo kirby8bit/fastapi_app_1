@@ -33,13 +33,15 @@ def index_page():
 
 @app.post("/login")
 def login_page(user_email : str = Form(...),password : str = Form(...)):
-
     for e_mail,name_password in users.items():
-        if e_mail == user_email:
-            if name_password["password"] == password:
-                name = name_password["name"]
-                return Response(f"your e_mail,username:  {e_mail}!, hello, {name}",media_type="text/html")
+        try:
+            if e_mail == user_email:
+                if name_password["password"] == password:
+                    name = name_password["name"]
+                    return {e_mail:name}
             else:
-                return Response(f"try again,username:  {e_mail}!",media_type="text/html")
+                return {e_mail:""}
+        except KeyError:
+            return {e_mail:""}
     
 
